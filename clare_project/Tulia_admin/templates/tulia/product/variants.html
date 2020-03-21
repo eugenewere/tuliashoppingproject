@@ -1,0 +1,302 @@
+{% extends 'tulia/dashboard/dashboard.html' %}
+{% load static %}
+{% load call_method %}
+{% load humanize %}
+{% block content %}
+    <div class="dashboard-wrapper">
+            <div class="container-fluid  dashboard-content">
+                <!-- ============================================================== -->
+                <!-- pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+
+
+                        </div>
+                    </div>
+                </div>
+                        {% for variant in variants %}
+                            <div class="modal fade" id="e{{ variant.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Variant Delete Confirmation</h4>
+                              </div>
+                              <div class="modal-body">
+                                Are You Sure You Want To Delete Variant <b>{{ variant.name }}</b>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <a href="{% url 'TuliaAdmin:variant_delete' variant.id %}"  class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Modal  variant edit-->
+                        {% for variant in variants %}
+                            <div class="modal fade" id="vdel{{ variant.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Variant Update Confirmation</h4>
+                              </div>
+                              <div class="modal-body">
+                                <form action="{% url 'TuliaAdmin:variant_edit' variant.id %}" method="POST">
+                                        {% csrf_token %}
+                                      <div class="form-group">
+                                        <label for="variant_name">Variant Option Name</label>
+                                        <input  value="{{ variant.name }}" name="name" type="text" class="form-control" id="variant_name" placeholder="Variant Option Name">
+                                      </div>
+                                        <button type="submit" class="btn btn-success"><i class="fa fa-file"></i> Save</button>
+                                        <button type="reset" class="btn btn-danger"><i class="fa fa-undo"></i> Reset</button>
+                                    </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+
+
+                <!-- end pageheader -->
+                <!-- ============================================================== -->
+                  <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                            <div class="card">
+                                <h5 class="card-header">Variants </h5>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <form action="{% url 'TuliaAdmin:addvariants' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="text" value="{{ seller.user_ptr_id }}" name="seller" hidden>
+                                          <div class="form-group">
+                                            <label for="variant_name">Variant Name</label>
+                                            <input name="name" type="text" class="form-control" id="variant_name" placeholder="Variant Name:eg Color, Weight">
+                                            <span id="helpBlock" class="help-block">Add a variant Before You Add Variant Options</span>
+                                          </div>
+                                            <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Add</button>
+                                            <button type="reset" class="btn btn-danger"><i class="fa fa-undo"></i> Reset</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                                <div class="card">
+                                    <h5 class="card-header">Variants Options</h5>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <form action="{% url 'TuliaAdmin:variants-options' %}" method="POST">
+                                                {% csrf_token %}
+                                                <div class="form-group has-feedback  col-sm-12">
+                                                  <label for="variant" class="">Variant</label> <br>
+                                                  <select required name="variant" class=" form-control" id="variant" data-show-subtext="true" data-live-search="true">
+                                                      <option selected disabled>Choose variant eg Color, </option>
+                                                    {% for variant in variants %}
+                                                         <option id="sel2" data-subtext="{{ variant.name }}" value="{{ variant.id }}">{{ variant.name }}</option>
+                                                    {% endfor %}
+                                                  </select>
+                                              </div>
+
+                                              <input type="text" value="{{ seller.user_ptr_id }}" name="seller" hidden>
+
+                                              <div class="form-group">
+                                                <label for="variant_name">Variant Option Name</label>
+                                                <input name="name" type="text" class="form-control" id="variant_name" placeholder="Variant Option Name">
+                                                <span id="helpBlock" class="help-block">Add a variant Before You Add Variant Options</span>
+                                              </div>
+
+                                                <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Add</button>
+                                                <button type="reset" class="btn btn-danger"><i class="fa fa-undo"></i> Reset</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                  </div><!--/.row-->
+                <div class="row">
+                    <!-- ============================================================== -->
+                    <!-- basic table  -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="card">
+                            <h5 class="card-header">Variants Table</h5>
+                            <div class="card-body">
+                                <div class="table-responsive">
+{#                                 <a href="#" class="btn-success btn pull-right" data-toggle="modal" data-target="#productadd">Add Variants</a>#}
+                                     <table id="example" class="example table table-striped table-bordered" style="width:100%;">
+                                        <thead>
+                                            <tr class="text-capitalize">
+                                                <th>#</th>
+                                                <th>Name</th>
+                                                <th>Created At</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for variant in variants %}
+                                                <tr class="text-center ">
+                                                    <td class="tb-data">{{ forloop.counter }}</td>
+                                                    <td class="tb-data">{{ variant.name }}</td>
+                                                    <td class="tb-data">{{ variant.created_at }}</td>
+                                                    <td class="tb-data">
+                                                        <a data-toggle="modal" data-target="#e{{ variant.id }}" href="#" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                                                        <a data-toggle="modal" data-target="#vdel{{ variant.id }}" href="#" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg6 col-md-6 col-sm-6 col-6">
+                        <div class="card">
+                            <h5 class="card-header">Variant Options Table</h5>
+                            <div class="card-body">
+                                <div class="table-responsive">
+{#                                 <a href="#" class="btn-success btn pull-right" data-toggle="modal" data-target="#productadd">Add Variant Options</a>#}
+                                   <table id="example" class="example table table-striped table-bordered" style="width:100%;">
+                                        <thead>
+                                            <tr class="text-capitalize">
+                                                <th>#</th>
+                                                <th>Name</th>
+                                                <th>Created At</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for variant_option in variant_options %}
+                                                <tr class="text-center ">
+                                                    <td class="tb-data">{{ forloop.counter }}</td>
+                                                    <td class="tb-data">{{ variant_option.name }}({{ variant_option.variant.name }})</td>
+                                                    <td class="tb-data">{{ variant_option.created_at }}</td>
+                                                    <td class="tb-data">
+                                                        <a data-toggle="modal" data-target="#vo{{ variant_option.id }}" href="#" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                                                        <a data-toggle="modal" data-target="#e-vo{{ variant_option.id }} " href="" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% for product in products %}
+                      <div class="modal fade" id="ff{{ product.id }}" role="dialog">
+                        <div class="modal-dialog modal-sm">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                              <h4 class="modal-title">Product Delete Confirmation</h4>
+                            </div>
+                            <div class="modal-body">
+                              <h4>Are you sure you want to delete! product <strong>{{ product.name }}</strong></h4>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn-danger btn" href="{% url 'TuliaAdmin:deleteproducts' product.id %}"><em class="fas fa-trash-alt"></em> Delete</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                    <!-- ============================================================== -->
+                    <!-- end basic table  -->
+                    <!-- ============================================================== -->
+                </div>
+
+            </div>
+                        {% for variant_option in variant_options %}
+                            <div class="modal fade" id="vo{{ variant_option.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Variant Option Delete Confirmation</h4>
+                              </div>
+                              <div class="modal-body">
+                                Are You Sure You Want To Delete Variant Option <b>{{ variant_option.name }}</b>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <a href="{% url 'TuliaAdmin:variants-options-delete' variant_option.id %}" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+{#                      end#}
+
+{#                    edit variant options#}
+                         {% for variant_option in variant_options %}
+                            <div class="modal fade" id="e-vo{{ variant_option.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Variant Option Edit</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                     <form action="{% url 'TuliaAdmin:variants-options-edit' variant_option.id  %}" method="POST">
+                                        {% csrf_token %}
+                                      <div class="form-group has-feedback  col-sm-12" style="width: 100%">
+                                          <label for="variant" class="">Variant</label> <br>
+                                          <select  required name="variant" class="selectpicker" id="variant" data-show-subtext="true" data-live-search="true">
+                                            {% for variant in variants %}
+                                            <option id="sel2" data-subtext="{{ variant.name }}" {% if variant.id == variant_option.id  %} selected {% endif %} value="{{ variant.id }}">{{ variant.name }}</option>
+                                            {% endfor %}
+                                          </select>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="variant_name">Variant Option Name</label>
+                                        <input value="{{ variant_option.name }}" name="name" type="text" class="form-control" id="variant_name" placeholder="Variant Option Name">
+                                      </div>
+
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-file"></i> Save</button>
+                                        <button type="reset" class="btn btn-danger"><i class="fa fa-undo"></i> Reset</button>
+                                    </form>
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                         {% endfor %}
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <div class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="javascript: void(0);">About</a>
+                                <a href="javascript: void(0);">Support</a>
+                                <a href="javascript: void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+{% endblock content %}
+  {% block scripts %}
+
+  {% endblock scripts %}

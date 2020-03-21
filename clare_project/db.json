@@ -1,0 +1,34 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$150000$QXUmjJOQpMUN$zGlvdnqjagMsnAEW0NyS2JbR9+bSkSW1BPDCoOWyc7A=",
+            "last_login": "2020-01-16T13:06:41.050Z",
+            "is_superuser": false,
+            "username": "eugeneseller",
+            "first_name": "mashkys",
+            "last_name": "maskys",
+            "email": "eugeneseller@yahoo.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2019-12-05T09:04:45.683Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "Tulia_admin.seller",
+        "pk": 1,
+        "fields": {
+            "phone_number": "0706833784",
+            "business_no": "jikonifyA123",
+            "store_logo": "store_logo/jikonify_black_-_Copy.png",
+            "store_name": "Jikonify",
+            "status": "VERIFIED",
+            "country": "NAIROBI",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]

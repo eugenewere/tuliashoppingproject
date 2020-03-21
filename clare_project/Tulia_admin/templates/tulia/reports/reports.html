@@ -1,0 +1,103 @@
+{% extends 'tulia/dashboard/dashboard.html' %}
+{% load humanize %}
+{% load call_method %}
+{% load static %}
+{% load call_method %}
+{% block content %}
+    <div class="dashboard-wrapper">
+            <div class="container-fluid  dashboard-content">
+                <!-- ============================================================== -->
+                <!-- pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title">Reports</h2>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <!-- ============================================================== -->
+                    <!-- basic table  -->
+                    <!-- ============================================================== -->
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Orders</h5>
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="report_wrapper col-sm-4 col-xs-12">
+                                        <a href="{%  url 'TuliaAdmin:orders_generated_pdf' %}" target="_blank">
+                                            <div class="pdfImage">
+                                                <img style="width: 200px;" src="{% static 'assets/images/reportspdf.png' %}" alt="">
+                                            </div>
+                                            <div class="report_subject">
+                                                <h3 class="text-capitalize">orders (pdf)</h3>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="report_wrapper col-sm-4 col-xs-12">
+                                        <a href="{% url 'TuliaAdmin:products_generated_pdf' %}" target="_blank">
+                                            <div class="pdfImage">
+                                                <img style="width: 200px;" src="{% static 'assets/images/reportspdf.png' %}" alt="">
+                                            </div>
+                                            <div class="report_subject">
+                                                <h3 class="text-capitalize">products (pdf)</h3>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ============================================================== -->
+                    <!-- end basic table  -->
+                    <!-- ============================================================== -->
+                </div>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <div class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="javascript: void(0);">About</a>
+                                <a href="javascript: void(0);">Support</a>
+                                <a href="javascript: void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+{% endblock content %}
+
+  {% block scripts %}
+      <script>
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('.blah')
+                            .attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+      </script>
+    {% endblock scripts %}

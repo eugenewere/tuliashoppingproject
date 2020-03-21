@@ -1,0 +1,172 @@
+{% extends 'tulia/dashboard/dashboard.html' %}
+{% load static %}
+{% block content %}
+    <div class="dashboard-wrapper">
+            <div class="container-fluid  dashboard-content">
+                <!-- ============================================================== -->
+                <!-- pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+
+                        </div>
+                    </div>
+                </div>
+                  <!-- Modaladd_brand -->
+            <div class="modal fade" id="add_brand" role="dialog">
+            <div class="modal-dialog modal-md">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Add Brand</h4>
+                </div>
+                <div class="modal-body">
+                 <fieldset>
+                     <form action="{% url 'TuliaAdmin:add_brand' %}" method="POST">
+                     {% csrf_token %}
+                         <div class="form-group has-success has-feedback">
+                          <label class="control-label" for="brand">Brand Name</label>
+                          <input type="text" class="form-control" name="name" id="brand" aria-describedby="inputSuccess2Status" required>
+                          <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                          <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                        </div>
+
+                        <div class="paddingy2">
+                            <button type="submit" class="btn bg-orange">  Add</button>
+{#                            <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fas fa-close"></i> Close</button>#}
+                        </div>
+                     </form>
+                 </fieldset>
+                </div>
+              </div>
+            </div>
+          </div>
+            {% for brand in brands %}
+                <!--delete confirm Modal -->
+              <div class="modal fade" id="delete{{ brand.id }}" role="dialog">
+                <div class="modal-dialog modal-sm">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title text-capitalize">Deleting {{ brand.name }}</h4>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure you want to delete {{ brand.name }}.</p>
+                    </div>
+                    <div class="modal-footer">
+{#                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+                        <a class="btn btn-danger" href="{% url 'TuliaAdmin:delete_brand' brand.id %}"> Delete </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          <!-- Small modal edit_modal -->
+              {% for brand in brands %}
+              <div class="modal fade" id="{{ brand.id }}" role="dialog">
+                <div class="modal-dialog modal-md">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 style="text-transform: capitalize" class="modal-title">Edit Brand {{ brand.name }}</h4>
+                    </div>
+                    <div class="modal-body">
+                         <form action="{% url 'TuliaAdmin:brand_edit' brand.id %}" method="POST">
+                         {% csrf_token %}
+
+                             <div class="form-group has-success has-feedback">
+                              <label class="control-label" for="brand">Brand Name</label>
+                              <input value="{{ brand.name }}" type="text" class="form-control" name="name" id="brand" aria-describedby="inputSuccess2Status" required>
+                            </div>
+
+                            <div class="paddingy2">
+                                <button type="submit" class="btn bg-orange"><i class="fas fa-file"></i> Save</button>
+    {#                         <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fas fa-close"></i>Close</button>#}
+                            </div>
+                         </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+
+                <!-- ============================================================== -->
+                <!-- end pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <!-- ============================================================== -->
+                    <!-- basic table  -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Basic Table</h5>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <a href="#" data-toggle="modal" data-target="#add_brand" class="btn btn-success pull-right">Add Brand</a>
+                                   <table id="example" class="table table-striped table-bordered" style="width:100%;">
+                            <thead >
+
+                                <tr class="text-capitalize">
+                                    <th>Id</th>
+                                    <th>Name</th>
+{#                                    <th>Category</th>#}
+                                    <th>Date Created</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    {% for brand in brands %}
+                                        <tr>
+                                            <td class="tb-data">{{ forloop.counter }}</td>
+                                            <td class="tb-data">{{ brand.name }}</td>
+{#                                            <td>{{ brand.category.name }}</td>#}
+{#                                            {% for category in categories %}#}
+{#                                                {% if category.id == brand.id %}#}
+{#                                                   <td class="tb-data">{{ category.name}}</td>#}
+{#                                                {% endif %}#}
+{#                                            {% endfor %}#}
+                                            <td class="tb-data">{{ brand.created_at }}</td>
+                                            <td class="text-center tb-data">
+                                                <a href="#" data-toggle="modal" data-target="#delete{{ brand.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</a>
+                                                <a href="#" data-toggle="modal" data-target="#{{ brand.id }}" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Edit</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                            </tbody>
+                        </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end basic table  -->
+                    <!-- ============================================================== -->
+                </div>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <div class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="javascript: void(0);">About</a>
+                                <a href="javascript: void(0);">Support</a>
+                                <a href="javascript: void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+{% endblock content %}

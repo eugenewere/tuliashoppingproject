@@ -1,0 +1,113 @@
+{% extends 'tulia/dashboard/dashboard.html' %}
+{% load humanize %}
+{% load call_method %}
+{% load static %}
+{% block content %}
+    <div class="dashboard-wrapper">
+            <div class="container-fluid  dashboard-content">
+                <!-- ============================================================== -->
+                <!-- pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title">Regions</h2>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <!-- ============================================================== -->
+                    <!-- basic table  -->
+                    <!-- ============================================================== -->
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <h5 class="card-header">{{ buyer.first_name|title }} {{ buyer.last_name|title }} Orders </h5>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="example" class="example table table-striped table-bordered" style="width:100%;">
+                                    <thead>
+                                        <tr class="text-capitalize">
+                                            <th>Id</th>
+                                            <th>Image</th>
+                                            <th>Product Name</th>
+                                            <th>Order Reference-No</th>
+                                            <th>Variants</th>
+                                            <th>Quantity</th>
+                                            <th>Cost</th>
+                                            <th>Created At</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders %}
+                                            <tr class="text-center ">
+                                                <td class="tb-data">{{ forloop.counter }}</td>
+                                                <td class="tb-data tb-data">
+                                                    <div class="product-image">
+                                                        <img style="width: 100px;" src="{{ order.product.featured_url.url }}" alt="">
+                                                    </div>
+                                                </td>
+                                                <td class="tb-data">{{ order.product.name }}</td>
+                                                <td class="tb-data">{{ order.checkout.reference_code }}</td>
+                                                <td class="tb-data">
+                                                    {% for variant in order.id|order_variants %}
+                                                        {{ variant }}
+                                                    {% endfor %}
+                                                </td>
+                                                <td>{{ order.quantity }}</td>
+                                                <td>
+                                                    {{ order.id|order_total|floatformat|intcomma }} Ksh
+                                                </td>
+                                                <td class="tb-data">{{ order.created_at }}</td>
+
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ============================================================== -->
+                    <!-- end basic table  -->
+                    <!-- ============================================================== -->
+                </div>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <div class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="javascript: void(0);">About</a>
+                                <a href="javascript: void(0);">Support</a>
+                                <a href="javascript: void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+{% endblock content %}
+
+  {% block scripts %}
+
+    {% endblock scripts %}
