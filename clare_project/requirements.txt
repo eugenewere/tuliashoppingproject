@@ -58,7 +58,7 @@ msg==0.7.8
 msgpack==0.6.2
 oauthlib==3.1.0
 openpyxl==3.0.0
-Pillow==6.1.0
+Pillow==6.2.0
 pycparser==2.19
 PyHamcrest==1.9.0
 pylint==2.3.1
