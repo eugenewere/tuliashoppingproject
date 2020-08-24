@@ -1,5 +1,0 @@
-.idea
-clarevirtualenv
-.mypy_cache/
-__pycache__/
-migrations/

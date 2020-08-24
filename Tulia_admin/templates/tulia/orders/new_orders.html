@@ -1,0 +1,139 @@
+{% extends 'tulia/dashboard/dashboard.html' %}
+{% load humanize %}
+{% load call_method %}
+{% load static %}
+{% block content %}
+    <div class="dashboard-wrapper">
+            <div class="container-fluid  dashboard-content">
+                <!-- ============================================================== -->
+                <!-- pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title">Regions</h2>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <!-- ============================================================== -->
+                    <!-- basic table  -->
+                    <!-- ============================================================== -->
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Orders</h5>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                 {% if buyer_orders|length > 0 %}
+                                    <div class="main-chart" id="line-chart" style="padding: 10px">
+                                       <table id="" class="example table table-striped table-bordered" style="">
+                                            <thead>
+                                                <tr class="text-capitalize">
+                                                    <th>#</th>
+                                                    <th>Buyer</th>
+                                                    <th>Phone Number</th>
+                                                    <th>Numbers of Products</th>
+                                                    <th>Order_number</th>
+                                                    <th>Total</th>
+                                                    <th>Created At</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for buyer_order in buyer_orders %}
+                                                    <tr class="text-center ">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{{ buyer_order.buyer.last_name }} {{ buyer_order.buyer.first_name}}</td>
+                                                        <td>{{ buyer_order.buyer.phone_number}}</td>
+                                                        <td>
+                                                            {{ buyer_order.reference_code|seller_buyer_quantities }}
+                                                        </td>
+                                                        <td>
+                                                            {{ buyer_order.reference_code }}
+
+                                                        </td>
+                                                        <td>
+                                                            {{ buyer_order.total|floatformat|intcomma }} Ksh
+
+                                                        </td>
+                                                        <td>
+                                                            {{ buyer_order.created_at|naturaltime }}
+                                                        </td>
+
+                                                        <td>
+                                                            <a href="{% url 'TuliaAdmin:buyer_orders' buyer_order.reference_code %}" class="btn btn-success"><i class="fas fa-pencil-alt"></i> View</a>
+                                                            <a href="#" data-toggle="modal" data-target="#rd{{ buyer_order.id }}" class="btn btn-danger"><i class="fas fa-trash " style="padding-right: 2px"></i>Cancel Order</a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+                                       </table>
+                                    </div>
+                                {% else %}
+                                    <div class="row mt-2 d-flex justify-content-center align-content-center align-items-center">
+                                         <div class="col-sm-3" style="height: 500px; width: 474px; border: none;margin: 20px; overflow: hidden; text-align: center;">
+                                             <h1>No Orders For You</h1>
+                                             <img class="img-fluid w-100 h-100" src="" alt="">
+                                         </div>
+                                    </div>
+                                {% endif %}
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- ============================================================== -->
+                    <!-- end basic table  -->
+                    <!-- ============================================================== -->
+                </div>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <div class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+{#                            Copyright © 2018 Concept. All rights reserved. Dashboard by <a href="https://colorlib.com/wp/">Colorlib</a>.#}
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="javascript: void(0);">About</a>
+                                <a href="javascript: void(0);">Support</a>
+                                <a href="javascript: void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+{% endblock content %}
+
+  {% block scripts %}
+      <script>
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('.blah')
+                            .attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+      </script>
+    {% endblock scripts %}
