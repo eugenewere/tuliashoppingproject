@@ -162,7 +162,10 @@
                                                 <td class="tb-data">{{ product.id }}</td>
                                                 <td class="tb-data tb-data" style="width: 110px; position: relative">
                                                     <div class="product-image ">
+                                                        {% if product.featured_url %}
+
                                                        <img style="width: 100%;" src="{{ product.featured_url.url }}" alt="{{ product.name }}">
+                                                        {% endif %}
                                                     </div>
 
                                                     {% if product.id|product_on_offer %}
