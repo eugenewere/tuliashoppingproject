@@ -335,7 +335,7 @@
                 success : function(response){
 
                     if (response.results === 'success') {
-                         {#spinner.hide();#}
+                         // {#spinner.hide();#}
                         $("#addproductform")[0].reset();
                         swal.fire({
                             title: "Success!",
@@ -345,13 +345,14 @@
                         });
                         $('#productadd').scrollTop(0);
                         $('#error_div').hide();
+                        location.reload();
 
 
 
                     }
                     else {
                         $('#error_div').html(response);
-                         {#spinner.hide();#}
+                         // {#spinner.hide();#}
                         setTimeout(function () {
                             swal.fire({
                                 title: "Error!",
@@ -361,6 +362,7 @@
                             });
                         },2000);
                         $('#productadd').scrollTop(0);
+                        location.reload();
 
 
                     }

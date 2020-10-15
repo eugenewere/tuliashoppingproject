@@ -149,11 +149,13 @@ def unWish_All_Products(request):
 
 # cart
 def cart(request):
+
     carts = Order_Product.objects.filter(buyer_id=request.user.id, checkout__isnull=True, product__wishlist__isnull=True)
     order_varianto = OrderProductVariantOption.objects.all()
     buyer =  Buyer.objects.filter(user_ptr_id=request.user.id).first()
     # variant =  Variant.objects.filter()
-    # variant = Variant.objects.filter(variant_options__orderproductvariantoption__orderProduct_id=carts)
+    # variant = Variant.objects.filter(variant_options__orderproductvariantoption__orderProduct_id=
+    # s)
     # print(cart)
     context = {
         'carts' : carts,
@@ -318,7 +320,7 @@ def user_account(request):
     context ={
         'user': logged_in_user,
         'wishlist': wishlist,
-        'orders':Order_Product.objects.filter(buyer=buyer, checkout__isnull=False , checkout__status='PAID'),
+        'orders':Order_Product.objects.filter(buyer=buyer, checkout__isnull=False , checkout__status='PENDING'),
         'buyer' : Buyer.objects.filter(user_ptr_id=user.id).first(),
     }
     return render(request,'shoppy/user_account.html',context)
@@ -548,21 +550,21 @@ def confirmCheckout(request):
 
                 sms = africastalking.SMS
                 # Use the service synchronously
-                # response = sms.send("<#> Your Orders is: " + str(orders_products) + 'at a cost of '+ str(checkoutt.total) + '.We will call you to confirm the order. Your Order number is ' + str(checkoutt.reference_code),
-                #                     ["+" + new_phone_number], )
-                #
-                # email_from = settings.EMAIL_HOST_USER
-                # recipient_list = [buyerr.email, ]
-                # subject = 'Order Alert'
-                # body = "Your Orders is: " + str(orders_products) + 'at a cost of '+ str(checkoutt.total) + ' .We will call you to confirm the order. Your Order number is ' + str(checkoutt.reference_code)
-                # k=send_mail(
-                #     subject=subject,
-                #     message=body,
-                #     from_email=email_from,
-                #     recipient_list=recipient_list,
-                #
-                # )
-                # print(k)
+                response = sms.send("<#> Your Orders is: " + str(orders_products) + 'at a cost of '+ str(checkoutt.total) + '.We will call you to confirm the order. Your Order number is ' + str(checkoutt.reference_code),
+                                    ["+" + new_phone_number], )
+
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [buyerr.email, ]
+                subject = 'Order Alert'
+                body = "Your Orders is: " + str(orders_products) + 'at a cost of '+ str(checkoutt.total) + ' .We will call you to confirm the order. Your Order number is ' + str(checkoutt.reference_code)
+                k=send_mail(
+                    subject=subject,
+                    message=body,
+                    from_email=email_from,
+                    recipient_list=recipient_list,
+
+                )
+                print(k)
 
                 context = {
                     'results': 'success',
